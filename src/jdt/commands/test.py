@@ -13,6 +13,10 @@ def register(subparsers: argparse._SubParsersAction) -> None:
     parser = subparsers.add_parser("test", help="Run Pantry-compatible tests locally")
     parser.add_argument("path", nargs="?", default=".", help="Path to package directory")
     parser.add_argument("-v", "--verbose", action="store_true", help="Show all test results")
+    parser.add_argument(
+        "--install-deps", action="store_true",
+        help="Install package pip dependencies before import checks",
+    )
     parser.set_defaults(func=run)
 
 
@@ -68,13 +72,17 @@ def run(args: argparse.Namespace) -> None:
 
         if sa_result.errors:
             all_passed = False
+            total_checks += len(sa_result.errors)
             for err in sa_result.errors:
                 print(f"  x {err}")
 
     # Phase 3: Import checks (only if manifest is valid)
     if not manifest_result.errors and manifest_result.components:
         print("Import checks...")
-        import_result = run_import_checks(pkg_dir, manifest_result.components)
+        import_result = run_import_checks(
+            pkg_dir, manifest_result.components,
+            install_deps=getattr(args, "install_deps", False),
+        )
 
         for test_result in import_result.tests:
             total_checks += 1

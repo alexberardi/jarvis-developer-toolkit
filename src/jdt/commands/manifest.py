@@ -85,8 +85,8 @@ def run(args: argparse.Namespace) -> None:
         categories=categories,
         keywords=keywords,
         platforms=existing_data.get("platforms", []),
-        secrets=introspected.get("secrets", existing_data.get("secrets", [])),
-        packages=introspected.get("packages", existing_data.get("packages", [])),
+        secrets=introspected.get("secrets") or existing_data.get("secrets", []),
+        packages=introspected.get("packages") or existing_data.get("packages", []),
         components=[
             ManifestComponent(type=c.type, name=c.name, path=c.path)
             for c in components
