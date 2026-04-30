@@ -11,6 +11,7 @@ from jdt.scaffold.templates import (
     GITIGNORE_TEMPLATE,
     README_TEMPLATE,
     LICENSE_TEMPLATE,
+    CLAUDE_MD_TEMPLATE,
 )
 
 
@@ -116,5 +117,27 @@ def scaffold_package(
         README_TEMPLATE.format(display_name=display_name, description=description)
     )
     (pkg_dir / "LICENSE").write_text(LICENSE_TEMPLATE)
+
+    # Build component list for CLAUDE.md
+    type_labels = {
+        "command": "Voice command (IJarvisCommand)",
+        "agent": "Background agent (IJarvisAgent)",
+        "device_protocol": "Device protocol (IJarvisDeviceProtocol)",
+        "device_manager": "Device manager (IJarvisDeviceManager)",
+        "prompt_provider": "Prompt provider (IJarvisPromptProvider)",
+        "routine": "Routine (JSON)",
+    }
+    component_list = "\n".join(
+        f"- **{c['name']}** — {type_labels.get(c['type'], c['type'])} (`{c['path']}`)"
+        for c in components
+    )
+    (pkg_dir / "CLAUDE.md").write_text(
+        CLAUDE_MD_TEMPLATE.format(
+            name=name,
+            display_name=display_name,
+            description=description,
+            component_list=component_list,
+        )
+    )
 
     return pkg_dir
