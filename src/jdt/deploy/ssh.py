@@ -29,17 +29,13 @@ def deploy_ssh(
         print(f"Error: scp failed: {scp_result.stderr.strip()}", file=sys.stderr)
         return False
 
-    # Run install on remote
+    # Run install on remote (use -t to allocate TTY for sudo password prompt)
     install_cmd = f"sudo {python} {store_script} install --local {staging_path}"
     print(f"Installing on {host}...")
     install_result = subprocess.run(
-        ["ssh", host, install_cmd],
-        capture_output=True, text=True,
+        ["ssh", "-t", host, install_cmd],
     )
-    if install_result.stdout:
-        print(install_result.stdout)
-    if install_result.stderr:
-        print(install_result.stderr, file=sys.stderr)
+    # ssh -t connects stdin/stdout directly (no capture) so sudo can prompt
 
     # Cleanup
     subprocess.run(
