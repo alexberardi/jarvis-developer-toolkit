@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jarvis-developer-toolkit"
-version = "0.1.0"
+version = "0.1.2"
 description = "CLI toolkit for building, testing, and deploying Jarvis voice assistant packages"
 readme = "README.md"
 license = {text = "MIT"}

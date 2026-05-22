@@ -29,13 +29,17 @@ def deploy_ssh(
         print(f"Error: scp failed: {scp_result.stderr.strip()}", file=sys.stderr)
         return False
 
-    # Run install on remote (use -t to allocate TTY for sudo password prompt)
-    install_cmd = f"sudo {python} {store_script} install --local {staging_path}"
+    # Run install on remote AS THE SSH USER (no outer sudo). The install
+    # writes user-scoped state to ~/.jarvis/packages/<pkg>/ via Path.home();
+    # running under sudo would resolve that to /root/ even though
+    # jarvis-node runs as `pi` — package files would land somewhere the
+    # service can't see them. Privilege escalation for the apt + post-install
+    # wrappers happens internally via NOPASSWD sudoers grants.
+    install_cmd = f"{python} {store_script} install --local {staging_path}"
     print(f"Installing on {host}...")
     install_result = subprocess.run(
-        ["ssh", "-t", host, install_cmd],
+        ["ssh", host, install_cmd],
     )
-    # ssh -t connects stdin/stdout directly (no capture) so sudo can prompt
 
     # Cleanup
     subprocess.run(
