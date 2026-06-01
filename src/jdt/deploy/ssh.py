@@ -35,7 +35,14 @@ def deploy_ssh(
     # jarvis-node runs as `pi` — package files would land somewhere the
     # service can't see them. Privilege escalation for the apt + post-install
     # wrappers happens internally via NOPASSWD sudoers grants.
-    install_cmd = f"{python} {store_script} install --local {staging_path}"
+    #
+    # We `cd` into the node dir first so the install's CWD-relative DB
+    # path (`./jarvis_node.db` in db.py) opens the node's real encrypted DB
+    # instead of accidentally creating a fresh empty one in the ssh user's
+    # home — that produced "no such table: secrets" failures.
+    install_cmd = (
+        f"cd {remote_node_dir} && {python} {store_script} install --local {staging_path}"
+    )
     print(f"Installing on {host}...")
     install_result = subprocess.run(
         ["ssh", host, install_cmd],
