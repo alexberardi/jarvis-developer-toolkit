@@ -44,7 +44,7 @@ VALID_PARAM_TYPES: set[str] = {
     "string", "int", "float", "bool", "enum", "date", "time", "datetime",
 }
 
-VALID_SECRET_SCOPES: set[str] = {"integration", "node"}
+VALID_SECRET_SCOPES: set[str] = {"integration", "user"}
 
 # Convention: directory name -> component type
 COMPONENT_DIR_TYPES: dict[str, str] = {

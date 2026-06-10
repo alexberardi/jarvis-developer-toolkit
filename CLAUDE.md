@@ -143,7 +143,7 @@ packages:                            # pip dependencies
 
 secrets:
   - key: MY_API_KEY
-    scope: integration               # integration | node
+    scope: integration               # integration | user
     value_type: string               # string | int | bool
     description: "API key for the service"
     required: true
@@ -158,8 +158,8 @@ secrets:
 `string`, `int`, `float`, `bool`, `enum`, `date`, `time`, `datetime`, plus array variants like `array<string>`, `array<datetime>`
 
 ### Secret Scopes
-- `integration` — shared across all nodes in a household (e.g., API key)
-- `node` — per-node (e.g., a location setting specific to one Pi)
+- `integration` — shared across the household; every node sees the same value (e.g., API key)
+- `user` — per-user; each family member has their own value (e.g., personal email credentials)
 
 ---
 
