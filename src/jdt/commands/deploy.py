@@ -27,7 +27,7 @@ def register(subparsers: argparse._SubParsersAction) -> None:
 
     # jdt deploy ssh <host> [path]
     ssh_parser = deploy_sub.add_parser("ssh", help="Install on Pi node over SSH")
-    ssh_parser.add_argument("host", help="SSH target (e.g., pi@jarvis-dev.local)")
+    ssh_parser.add_argument("host", help="SSH target (e.g., pi@your-node.local)")
     ssh_parser.add_argument("path", nargs="?", default=".", help="Package directory")
     ssh_parser.add_argument("--node-dir", default="/opt/jarvis-node", help="Remote node install dir")
     ssh_parser.set_defaults(func=_run_ssh)
