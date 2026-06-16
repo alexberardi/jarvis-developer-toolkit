@@ -32,7 +32,7 @@ jdt test . -v                # verbose output
 # 4. Deploy
 jdt deploy local .                        # local node
 jdt deploy docker jarvis-node-kitchen .   # Docker container
-jdt deploy ssh pi@jarvis-dev.local .      # Pi Zero over SSH
+jdt deploy ssh pi@<dev-node>.local .      # Pi Zero over SSH
 ```
 
 ## CLI Commands

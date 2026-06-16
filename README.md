@@ -81,7 +81,7 @@ Introspects your classes to extract secrets, parameters, keywords, and descripti
 ```bash
 jdt deploy local                          # local jarvis-node-setup
 jdt deploy docker jarvis-node-kitchen     # Docker node container
-jdt deploy ssh pi@jarvis-dev.local        # Pi Zero over SSH
+jdt deploy ssh pi@<dev-node>.local        # Pi Zero over SSH
 ```
 
 ## Shared Directory Naming
