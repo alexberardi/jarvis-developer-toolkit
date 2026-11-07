@@ -66,6 +66,9 @@ COMPONENT_ENTRY_POINTS: dict[str, str] = {
     "routine": "routine.json",
 }
 
+# SDK classes that subclass a component's base and count as it (IJarvisMusicCommand is a command).
+BASE_CLASS_SUBCLASSES: dict[str, tuple[str, ...]] = {"IJarvisCommand": ("IJarvisMusicCommand",)}
+
 # Component type -> (base class name, required methods/properties)
 COMPONENT_TYPE_INFO: dict[str, tuple[str, list[str]]] = {
     "command": (

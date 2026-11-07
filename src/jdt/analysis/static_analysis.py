@@ -11,6 +11,7 @@ from pathlib import Path
 
 from jdt.core.constants import (
     BLOCKED_SHARED_DIR_NAMES,
+    BASE_CLASS_SUBCLASSES,
     COMPONENT_TYPE_INFO,
     DANGEROUS_CALLS,
     DANGEROUS_MODULES,
@@ -129,8 +130,9 @@ def _find_class_by_base(tree: ast.Module, base_class_name: str) -> ast.ClassDef 
             continue
         for base in node.bases:
             name = _get_name(base)
-            if name and (name == base_class_name or name.endswith(f".{base_class_name}")):
-                return node
+            for accepted in (base_class_name, *BASE_CLASS_SUBCLASSES.get(base_class_name, ())):
+                if name and (name == accepted or name.endswith(f".{accepted}")):
+                    return node
     return None
 
 

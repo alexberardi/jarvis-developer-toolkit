@@ -28,6 +28,18 @@ class TestStaticAnalysis:
         result = run_static_analysis(tmp_path, comps)
         assert not result.passed
 
+    def test_music_command_counts_as_a_command(self, tmp_path: Path):
+        cmd_dir = tmp_path / "commands" / "radio"
+        cmd_dir.mkdir(parents=True)
+        (cmd_dir / "command.py").write_text(
+            "from jarvis_command_sdk import IJarvisMusicCommand\n"
+            "class Radio(IJarvisMusicCommand):\n"
+            "    pass\n"
+        )
+        comps = [ManifestComponent(type="command", name="radio", path="commands/radio/command.py")]
+        result = run_static_analysis(tmp_path, comps)
+        assert result.passed, result
+
     def test_dangerous_import_flagged(self, tmp_path: Path):
         cmd_dir = tmp_path / "commands" / "danger"
         cmd_dir.mkdir(parents=True)

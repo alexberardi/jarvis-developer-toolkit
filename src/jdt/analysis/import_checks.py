@@ -173,7 +173,8 @@ def _check_component(pkg_dir: Path, comp: ManifestComponent) -> list[TestResult]
     cls = None
     for attr_name in dir(mod):
         obj = getattr(mod, attr_name)
-        if isinstance(obj, type) and issubclass(obj, base_class) and obj is not base_class:
+        # An SDK class imported into the module (IJarvisMusicCommand) is not the package's class.
+        if isinstance(obj, type) and issubclass(obj, base_class) and not obj.__module__.startswith("jarvis_command_sdk"):
             cls = obj
             break
 
