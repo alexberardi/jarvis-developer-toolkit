@@ -13,6 +13,18 @@ class TestImportChecks:
         assert result.passed, f"Failed: {[(t.name, t.error) for t in result.tests if not t.passed]}"
         assert result.pass_count >= 10  # import, find_class, instantiate, 7+ property checks
 
+    def test_music_command(self, tmp_pkg: Path):
+        # The SDK's IJarvisMusicCommand is imported into the module; the package's class is found.
+        py = tmp_pkg / "commands" / "test_cmd" / "command.py"
+        py.write_text(py.read_text().replace("IJarvisCommand", "IJarvisMusicCommand") + (
+            "\n    @property\n    def playback_binary(self):\n        return 'mpv'\n"
+            "\n    def playback_status(self):\n        return None\n"
+            "\n    def playback_control(self, action, **args):\n        return None\n"
+        ))
+        comps = [ManifestComponent(type="command", name="test_cmd", path="commands/test_cmd/command.py")]
+        result = run_import_checks(tmp_pkg, comps)
+        assert result.passed, f"Failed: {[(t.name, t.error) for t in result.tests if not t.passed]}"
+
     def test_bundle_all_pass(self, tmp_bundle: Path):
         comps = [
             ManifestComponent(type="command", name="test_bundle", path="commands/test_bundle/command.py"),
