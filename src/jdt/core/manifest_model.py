@@ -16,7 +16,7 @@ class ManifestComponent(BaseModel):
     """A single component within a package bundle."""
 
     type: Literal[
-        "command", "agent", "device_protocol", "device_manager",
+        "command", "agent", "daemon", "device_protocol", "device_manager",
         "prompt_provider", "routine",
     ]
     name: str

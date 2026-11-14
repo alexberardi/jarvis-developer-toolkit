@@ -60,6 +60,11 @@ def _get_sdk_class(comp_type: str) -> type | None:
             })
         except ImportError:
             return None
+        try:  # an SDK before 0.17.0 has no daemons
+            from jarvis_command_sdk.daemon import IJarvisDaemon
+            _SDK_CLASSES["daemon"] = IJarvisDaemon
+        except ImportError:
+            pass
     return _SDK_CLASSES.get(comp_type)
 
 
@@ -241,6 +246,17 @@ def _check_agent(instance: Any, record) -> None:
     _check_attr(instance, "required_secrets", list, record, prop_name="required_secrets_type")
 
 
+def _check_daemon(instance: Any, record) -> None:
+    """A daemon's run() is never awaited here: it is meant not to return."""
+    import inspect
+
+    _check_attr(instance, "name", str, record)
+    _check_attr(instance, "description", str, record)
+    _check_attr(instance, "required_secrets", list, record, prop_name="required_secrets_type")
+    is_async = inspect.iscoroutinefunction(getattr(instance, "run", None))
+    record("run_is_async", is_async, "" if is_async else "run must be declared with async def")
+
+
 def _check_protocol(instance: Any, record) -> None:
     _check_attr(instance, "protocol_name", str, record)
     _check_attr(instance, "supported_domains", list, record)
@@ -271,6 +287,7 @@ def _check_attr(
 _TYPE_CHECKERS = {
     "command": _check_command,
     "agent": _check_agent,
+    "daemon": _check_daemon,
     "device_protocol": _check_protocol,
     "device_manager": _check_device_manager,
 }

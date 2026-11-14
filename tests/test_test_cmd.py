@@ -34,6 +34,27 @@ class TestImportChecks:
         assert result.passed
         assert result.pass_count >= 14  # command (10) + agent (4+)
 
+    def test_daemon(self, tmp_path: Path):
+        # A daemon is described but never run; a run() that isn't async is refused.
+        d = tmp_path / "daemons" / "bridge"
+        d.mkdir(parents=True)
+        src = (
+            "from jarvis_command_sdk import IJarvisDaemon\n\n"
+            "class Bridge(IJarvisDaemon):\n"
+            "    @property\n    def name(self): return 'bridge'\n"
+            "    @property\n    def description(self): return 'Holds a connection'\n"
+            "    @property\n    def required_secrets(self): return []\n"
+            "    async def run(self): raise AssertionError('never awaited by the checks')\n"
+        )
+        (d / "daemon.py").write_text(src)
+        comps = [ManifestComponent(type="daemon", name="bridge", path="daemons/bridge/daemon.py")]
+        result = run_import_checks(tmp_path, comps)
+        assert result.passed, f"Failed: {[(t.name, t.error) for t in result.tests if not t.passed]}"
+
+        (d / "daemon.py").write_text(src.replace("async def run", "def run"))
+        result = run_import_checks(tmp_path, comps)
+        assert [t.name for t in result.tests if not t.passed] == ["bridge/run_is_async"]
+
     def test_import_failure(self, tmp_path: Path):
         cmd_dir = tmp_path / "commands" / "broken"
         cmd_dir.mkdir(parents=True)
