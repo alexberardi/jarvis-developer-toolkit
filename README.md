@@ -104,6 +104,7 @@ After installation, shared code is placed on `sys.path`. Generic names like `sha
 |------|-----------|----------------|---------------|
 | command | command.py | commands/{name}/ | IJarvisCommand |
 | agent | agent.py | agents/{name}/ | IJarvisAgent |
+| daemon | daemon.py | daemons/{name}/ | IJarvisDaemon |
 | device_protocol | protocol.py | device_families/{name}/ | IJarvisDeviceProtocol |
 | device_manager | manager.py | device_managers/{name}/ | IJarvisDeviceManager |
 | prompt_provider | provider.py | prompt_providers/{name}/ | IJarvisPromptProvider |
