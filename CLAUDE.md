@@ -73,6 +73,7 @@ A standalone repo that extends a Jarvis voice node with one or more components. 
 |------|-----------|----------------|---------------|-------|
 | command | command.py | `commands/{name}/` | IJarvisCommand | No |
 | agent | agent.py | `agents/{name}/` | IJarvisAgent | Yes |
+| daemon | daemon.py | `daemons/{name}/` | IJarvisDaemon | Yes |
 | device_protocol | protocol.py | `device_families/{name}/` | IJarvisDeviceProtocol | Yes |
 | device_manager | manager.py | `device_managers/{name}/` | IJarvisDeviceManager | Yes |
 | prompt_provider | provider.py | `prompt_providers/{name}/` | IJarvisPromptProvider | No |

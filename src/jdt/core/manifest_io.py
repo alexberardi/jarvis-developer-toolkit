@@ -62,6 +62,7 @@ def infer_components(pkg_dir: Path, manifest_name: str) -> list[ManifestComponen
     - command.py at root -> single command
     - commands/<name>/command.py -> command(s)
     - agents/<name>/agent.py -> agent(s)
+    - daemons/<name>/daemon.py -> daemon(s)
     - device_families/<name>/protocol.py -> device protocol(s)
     - device_managers/<name>/manager.py -> device manager(s)
     - prompt_providers/<name>/provider.py -> prompt provider(s)

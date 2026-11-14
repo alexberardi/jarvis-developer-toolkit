@@ -10,6 +10,7 @@ SCHEMA_VERSION: int = 1
 VALID_COMPONENT_TYPES: list[str] = [
     "command",
     "agent",
+    "daemon",
     "device_protocol",
     "device_manager",
     "prompt_provider",
@@ -50,6 +51,7 @@ VALID_SECRET_SCOPES: set[str] = {"integration", "user"}
 COMPONENT_DIR_TYPES: dict[str, str] = {
     "commands": "command",
     "agents": "agent",
+    "daemons": "daemon",
     "device_families": "device_protocol",
     "device_managers": "device_manager",
     "prompt_providers": "prompt_provider",
@@ -60,6 +62,7 @@ COMPONENT_DIR_TYPES: dict[str, str] = {
 COMPONENT_ENTRY_POINTS: dict[str, str] = {
     "command": "command.py",
     "agent": "agent.py",
+    "daemon": "daemon.py",
     "device_protocol": "protocol.py",
     "device_manager": "manager.py",
     "prompt_provider": "provider.py",
@@ -79,6 +82,10 @@ COMPONENT_TYPE_INFO: dict[str, tuple[str, list[str]]] = {
     "agent": (
         "IJarvisAgent",
         ["name", "description", "schedule", "required_secrets", "run", "get_context_data"],
+    ),
+    "daemon": (
+        "IJarvisDaemon",
+        ["name", "description", "required_secrets", "run"],
     ),
     "device_protocol": (
         "IJarvisDeviceProtocol",

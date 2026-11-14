@@ -136,6 +136,11 @@ def _get_base_class(comp_type: str) -> type | None:
         "device_protocol": IJarvisDeviceProtocol,
         "device_manager": IJarvisDeviceManager,
     }
+    try:  # an SDK before 0.17.0 has no daemons
+        from jarvis_command_sdk.daemon import IJarvisDaemon
+        mapping["daemon"] = IJarvisDaemon
+    except ImportError:
+        pass
     return mapping.get(comp_type)
 
 
